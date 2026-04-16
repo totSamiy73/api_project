@@ -11,3 +11,9 @@ class Endpoint:
         with allure.step(f"Проверяем статус код {status_code}"):
             actual_sc = self.response.status_code
             assert actual_sc == status_code, f"неверный статус код, ожидали {status_code}, получили {actual_sc}"
+
+    @allure.step("Время ответа при запросе")
+    def get_all_meme_time_response(self):
+        with allure.step(f"Проверяем время ответа метода {self.response.request.method}"):
+            time = self.response.elapsed.total_seconds()
+            assert time < 1, "время ответа более 1 сек"
