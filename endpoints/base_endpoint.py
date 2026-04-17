@@ -1,8 +1,10 @@
 import allure
+
 correct_body = {"info": {"colors": ["green", "black", "white"], "objects": ["picture", "text"]},
-               "tags": ["cat", "bu"],
-               "text": "Бу! испугался?!",
-               "url": "https://spbcult.ru/upload/iblock/7b9/9n0tc4etzlpw3t1h1021gjzhwl226j5k.jpg"}
+                "tags": ["cat", "bu"],
+                "text": "Бу! испугался?!",
+                "url": "https://spbcult.ru/upload/iblock/7b9/9n0tc4etzlpw3t1h1021gjzhwl226j5k.jpg"}
+
 
 class Endpoint:
     BASE_URL = "http://memesapi.course.qa-practice.com"

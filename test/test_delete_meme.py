@@ -2,6 +2,8 @@ import allure
 import pytest
 
 bad_token = [None, {}, {"Authorization": "qwerty"}, {"Authorization": ""}]
+
+
 @allure.title("Удаление существующего мема по id")
 def test_delete_meme(create_meme_id_fixture, delete_meme_fixture, get_one_meme_fixture):
     delete_meme_fixture.delete_meme(create_meme_id_fixture, delete_meme_fixture.AUTH_TOKEN)
@@ -11,7 +13,6 @@ def test_delete_meme(create_meme_id_fixture, delete_meme_fixture, get_one_meme_f
     get_one_meme_fixture.check_response_status_code(404)
 
 
-
 @allure.title("Повторное удаление уже удалённого мема")
 def test_double_delete_meme(create_meme_id_fixture, delete_meme_fixture):
     delete_meme_fixture.delete_meme(create_meme_id_fixture, delete_meme_fixture.AUTH_TOKEN)
@@ -19,10 +20,18 @@ def test_double_delete_meme(create_meme_id_fixture, delete_meme_fixture):
     delete_meme_fixture.delete_meme(create_meme_id_fixture, delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_response_status_code(404)
 
+
 @allure.title("Удаление мема с несуществующим id")
 def test_non_existent_delete_meme(delete_meme_fixture):
     delete_meme_fixture.delete_meme(1234567890, delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_response_status_code(404)
+
+
+@allure.title("Удаление мема с некорректным id")
+def test_delete_meme_invalid_id(delete_meme_fixture):
+    delete_meme_fixture.delete_meme(-1, delete_meme_fixture.AUTH_TOKEN)
+    delete_meme_fixture.check_response_status_code(404)
+
 
 @allure.title("Удаление мема без токена/некорректный токен/пустой токен")
 @pytest.mark.parametrize("badtoken", bad_token)
@@ -31,20 +40,14 @@ def test_delete_meme_invalid_token(create_and_delete_meme_id_fixture, delete_mem
     delete_meme_fixture.check_response_status_code(401)
 
 
-
 @allure.title("Удаление мема через метод POST")
 def test_delete_meme_invalid_method_post(create_and_delete_meme_id_fixture, delete_meme_fixture):
-    delete_meme_fixture.check_delete_meme_invalid_method(create_and_delete_meme_id_fixture, delete_meme_fixture.AUTH_TOKEN)
+    delete_meme_fixture.check_delete_meme_invalid_method(create_and_delete_meme_id_fixture,
+                                                         delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_response_status_code(405)
+
 
 @allure.title("Время ответа при удалении мема")
 def test_delete_meme_time_response(create_meme_id_fixture, delete_meme_fixture):
     delete_meme_fixture.delete_meme(create_meme_id_fixture, delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_time_response()
-
-
-
-
-
-
-

@@ -30,4 +30,3 @@ class GetAllMeme(Endpoint):
     def get_all_meme_invalid_method(self):
         self.response = requests.post(f"{self.BASE_URL}/meme", headers=self.AUTH_TOKEN)
         return self.response
-
