@@ -13,7 +13,7 @@ def test_get_all_meme_status_positive(get_all_meme_fixture):
 
 @allure.title("Получение всех мемов, без токена/некорректный токен/пустой токен")
 @pytest.mark.parametrize("badtoken", bad_token)
-def test_get_all_meme_unauthorized(get_all_meme_fixture, badtoken):
+def test_get_all_meme_invalid_token(get_all_meme_fixture, badtoken):
     get_all_meme_fixture.get_all_meme(badtoken)
     get_all_meme_fixture.check_response_status_code(401)
 
@@ -27,4 +27,4 @@ def test_get_all_meme_invalid_method(get_all_meme_fixture):
 @allure.title("Время ответа при запросе всех мемов")
 def test_get_all_meme_time_response(get_all_meme_fixture):
     get_all_meme_fixture.get_all_meme(get_all_meme_fixture.AUTH_TOKEN)
-    get_all_meme_fixture.get_all_meme_time_response()
+    get_all_meme_fixture.check_time_response()
