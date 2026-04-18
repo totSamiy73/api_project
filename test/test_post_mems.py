@@ -29,19 +29,16 @@ bad_body_type_field_negative = [
 
 
 @allure.title("Создание мема с валидными данными")
-def test_post_meme(post_meme_and_delete_fixture):
+def test_post_meme(post_meme_and_delete_fixture, get_one_meme_fixture):
     post_meme_and_delete_fixture.create_new_mem(correct_body, post_meme_and_delete_fixture.AUTH_TOKEN)
     post_meme_and_delete_fixture.check_response_status_code(200)
-    post_meme_and_delete_fixture.check_body_meme()
-
-
-@allure.title("Получение созданного мема по id")
-def test_post_meme_through_get(post_meme_and_delete_fixture, get_one_meme_fixture):
-    post_meme_and_delete_fixture.create_new_mem(correct_body, post_meme_and_delete_fixture.AUTH_TOKEN)
+    post_meme_and_delete_fixture.check_body_meme(correct_body)
     get_one_meme_fixture.get_meme(post_meme_and_delete_fixture.response.json()['id'],
                                   post_meme_and_delete_fixture.AUTH_TOKEN)
     get_one_meme_fixture.check_response_status_code(200)
-    get_one_meme_fixture.check_body_meme()
+    get_one_meme_fixture.check_body_meme(correct_body)
+
+
 
 
 @allure.title("Создание мема без токена/некорректный токен/пустой токен")
@@ -55,7 +52,8 @@ def test_post_meme_invalid_token(post_meme_and_delete_fixture, badtoken):
 def test_post_meme_additional_field(post_meme_and_delete_fixture):
     post_meme_and_delete_fixture.create_new_mem(bad_body_additional_field, post_meme_and_delete_fixture.AUTH_TOKEN)
     post_meme_and_delete_fixture.check_response_status_code(200)
-    post_meme_and_delete_fixture.check_post_meme_no_additional_field()
+    post_meme_and_delete_fixture.check_body_meme(bad_body_additional_field)
+    post_meme_and_delete_fixture.check_meme_no_additional_field()
 
 
 @allure.title("Создание мема без обязательных полей")
@@ -81,7 +79,7 @@ def test_post_meme_type_field_negative(post_meme_and_delete_fixture, bad_body):
 
 @allure.title("Создание мема через метод PUT")
 def test_post_meme_invalid_method_put(post_meme_and_delete_fixture):
-    post_meme_and_delete_fixture.check_post_meme_invalid_method(correct_body, post_meme_and_delete_fixture.AUTH_TOKEN)
+    post_meme_and_delete_fixture.post_meme_invalid_method(correct_body, post_meme_and_delete_fixture.AUTH_TOKEN)
     post_meme_and_delete_fixture.check_response_status_code(405)
 
 
