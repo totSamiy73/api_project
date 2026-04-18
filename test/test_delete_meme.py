@@ -42,7 +42,7 @@ def test_delete_meme_invalid_token(create_and_delete_meme_id_fixture, delete_mem
 
 @allure.title("Удаление мема через метод POST")
 def test_delete_meme_invalid_method_post(create_and_delete_meme_id_fixture, delete_meme_fixture):
-    delete_meme_fixture.check_delete_meme_invalid_method(create_and_delete_meme_id_fixture,
+    delete_meme_fixture.delete_meme_invalid_method(create_and_delete_meme_id_fixture,
                                                          delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_response_status_code(405)
 
@@ -51,3 +51,5 @@ def test_delete_meme_invalid_method_post(create_and_delete_meme_id_fixture, dele
 def test_delete_meme_time_response(create_meme_id_fixture, delete_meme_fixture):
     delete_meme_fixture.delete_meme(create_meme_id_fixture, delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_time_response()
+
+# добавить тест на попытку удаления чужого мема!!!

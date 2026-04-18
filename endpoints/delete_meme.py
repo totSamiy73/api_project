@@ -14,5 +14,5 @@ class DeleteMeme(Endpoint):
         assert self.response.text == f"Meme with id {id_meme} successfully deleted"
 
     @allure.step("Удаление мема через POST запрос")
-    def check_delete_meme_invalid_method(self, id_meme, token):
+    def delete_meme_invalid_method(self, id_meme, token):
         self.response = requests.post(f"{self.BASE_URL}/meme/{id_meme}", headers=token)

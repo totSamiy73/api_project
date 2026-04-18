@@ -4,6 +4,7 @@ from endpoints.get_all_mems import GetAllMeme
 from endpoints.post_mem import PostMem
 from endpoints.delete_meme import DeleteMeme
 from endpoints.get_meme import GetMeme
+from endpoints.put_meme import PutMeme
 
 correct_body = {"info": {"colors": ["green", "black", "white"], "objects": ["picture", "text"]},
                 "tags": ["cat", "bu"],
@@ -39,6 +40,12 @@ def post_meme_and_delete_fixture():
     yield obj
     if obj.response and obj.response.status_code == 200:
         requests.delete(f"{obj.BASE_URL}/meme/{obj.response.json()['id']}", headers=obj.AUTH_TOKEN)
+
+@pytest.fixture()
+def put_meme_fixture():
+    """Экземпляр класса PutMeme"""
+    obj = PutMeme()
+    return obj
 
 
 @pytest.fixture()
