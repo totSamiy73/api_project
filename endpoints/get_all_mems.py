@@ -16,7 +16,14 @@ class GetAllMeme(Endpoint):
         assert isinstance(js, dict), "ответ на запрос всех мемов содержит не dict"
         assert 'data' in js, "отсутствует поле data в ответе при запросе всех мемов"
         assert isinstance(js['data'], list), "поле data в ответе при запросе всех мемов содержит не list"
-
+        required_fields = ["id", "info", "tags", "text", "updated_by", "url"]
+        set_id_mem = set()
+        for obj in js['data'][-100:]:
+            assert isinstance(obj, dict), "список мемов состоит не из объектов"
+            for field in required_fields:
+                assert field in obj, f"в списке всех мемов у объекта {obj.get('id')} отсутствует обязательное поле {field}"
+            assert obj['id'] not in set_id_mem, f"не уникальный id у объекта id={obj['id']}"
+            set_id_mem.add(obj['id'])
 
 
     @allure.step("Неверный метод запроса всех мемов POST")
