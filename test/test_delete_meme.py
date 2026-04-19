@@ -1,7 +1,6 @@
 import allure
 import pytest
-
-bad_token = [None, {}, {"Authorization": "qwerty"}, {"Authorization": ""}]
+from data_for_tests import bad_token
 
 
 @allure.title("Удаление существующего мема по id")
@@ -43,7 +42,7 @@ def test_delete_meme_invalid_token(create_and_delete_meme_id_fixture, delete_mem
 @allure.title("Удаление мема через метод POST")
 def test_delete_meme_invalid_method_post(create_and_delete_meme_id_fixture, delete_meme_fixture):
     delete_meme_fixture.delete_meme_invalid_method(create_and_delete_meme_id_fixture,
-                                                         delete_meme_fixture.AUTH_TOKEN)
+                                                   delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_response_status_code(405)
 
 
@@ -52,4 +51,8 @@ def test_delete_meme_time_response(create_meme_id_fixture, delete_meme_fixture):
     delete_meme_fixture.delete_meme(create_meme_id_fixture, delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_time_response()
 
-# добавить тест на попытку удаления чужого мема!!!
+
+@allure.title("Удаление чужого мема")
+def test_delete_meme_someone(token_create_meme_create_and_delete_return_id, delete_meme_fixture):
+    delete_meme_fixture.delete_meme(token_create_meme_create_and_delete_return_id, delete_meme_fixture.AUTH_TOKEN)
+    delete_meme_fixture.check_response_status_code(403)

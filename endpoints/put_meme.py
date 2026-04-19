@@ -2,6 +2,7 @@ from endpoints.base_endpoint import Endpoint
 import allure
 import requests
 
+
 class PutMeme(Endpoint):
 
     @allure.step("Обновляем мем")
@@ -20,9 +21,3 @@ class PutMeme(Endpoint):
         response2 = requests.put(f"{self.BASE_URL}/meme/{id_meme}", json=body, headers=token)
         assert response1.status_code == response2.status_code, "Статус коды разные у одинаковых запросов PUT"
         assert response1.json() == response2.json(), "Тело у мемов разные при одинаковых запросах PUT"
-
-
-
-
-
-
