@@ -25,7 +25,6 @@ class GetAllMeme(Endpoint):
             assert obj['id'] not in set_id_mem, f"не уникальный id у объекта id={obj['id']}"
             set_id_mem.add(obj['id'])
 
-
     @allure.step("Неверный метод запроса всех мемов POST")
     def get_all_meme_invalid_method(self):
         self.response = requests.post(f"{self.BASE_URL}/meme", headers=self.AUTH_TOKEN)

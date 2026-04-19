@@ -1,44 +1,20 @@
 import allure
 import pytest
-
-correct_body = {"info": {"colors": ["green", "black", "white"], "objects": ["picture", "text"]},
-                "tags": ["cat", "bu"],
-                "text": "Бу! испугался?!",
-                "url": "https://spbcult.ru/upload/iblock/7b9/9n0tc4etzlpw3t1h1021gjzhwl226j5k.jpg"}
-
-bad_token = [None, {}, {"Authorization": "qwerty"}, {"Authorization": ""}]
-
-bad_body_no_field = [{"info": {"c": 111}, "tags": ["qqq"], "text": "test_bad_body"},
-                     {"info": {"c": 111}, "tags": ["qqq"], "url": "https://test.ru"},
-                     {"info": {"c": 111}, "text": "test_bad_body", "url": "https://test.ru"},
-                     {"tags": ["qqq"], "text": "test_bad_body", "url": "https://test.ru"}]
-
-bad_body_additional_field = {"info": {"c": 111},
-                             "tags": ["qqq"],
-                             "text": "test_bad_body",
-                             "url": "https://test.ru",
-                             "TEST": "TESTOVICH"}
-
-bad_empty_body = [{}, None]
-
-bad_body_type_field_negative = [
-    {"info": "str, должен быть {}", "tags": ["qqq"], "text": "test_bad", "url": "https://test.ru"},
-    {"info": {"c": 111}, "tags": "str, должен быть []", "text": "test_bad", "url": "https://test.ru"},
-    {"info": {"c": 111}, "tags": ["qqq"], "text": 111, "url": "https://test.ru"},
-    {"info": {"c": 111}, "tags": ["qqq"], "text": "test_bad", "url": ["https://test.ru"]}]
+from data_for_tests import correct_body, bad_token, bad_body_no_field, bad_body_additional_field, bad_empty_body, \
+    bad_body_type_field_negative
 
 
 @allure.title("Создание мема с валидными данными")
 def test_post_meme(post_meme_and_delete_fixture, get_one_meme_fixture):
     post_meme_and_delete_fixture.create_new_mem(correct_body, post_meme_and_delete_fixture.AUTH_TOKEN)
     post_meme_and_delete_fixture.check_response_status_code(200)
-    post_meme_and_delete_fixture.check_body_meme(correct_body)
+    body = correct_body.copy()
+    body['updated_by'] = 'tot'  # добавили updated_by для сравнения с ответом
+    post_meme_and_delete_fixture.check_body_meme(body)
     get_one_meme_fixture.get_meme(post_meme_and_delete_fixture.response.json()['id'],
                                   post_meme_and_delete_fixture.AUTH_TOKEN)
     get_one_meme_fixture.check_response_status_code(200)
-    get_one_meme_fixture.check_body_meme(correct_body)
-
-
+    get_one_meme_fixture.check_body_meme(body)
 
 
 @allure.title("Создание мема без токена/некорректный токен/пустой токен")
@@ -52,8 +28,10 @@ def test_post_meme_invalid_token(post_meme_and_delete_fixture, badtoken):
 def test_post_meme_additional_field(post_meme_and_delete_fixture):
     post_meme_and_delete_fixture.create_new_mem(bad_body_additional_field, post_meme_and_delete_fixture.AUTH_TOKEN)
     post_meme_and_delete_fixture.check_response_status_code(200)
-    post_meme_and_delete_fixture.check_body_meme(bad_body_additional_field)
-    post_meme_and_delete_fixture.check_meme_no_additional_field()
+    body = bad_body_additional_field.copy()
+    body['updated_by'] = 'tot'
+    post_meme_and_delete_fixture.check_body_meme(body)
+    post_meme_and_delete_fixture.check_no_additional_field()
 
 
 @allure.title("Создание мема без обязательных полей")

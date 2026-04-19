@@ -20,5 +20,3 @@ class GetMeme(Endpoint):
     @allure.step("Получаем мем через POST запрос")
     def get_meme_invalid_method(self, id_meme, token):
         self.response = requests.post(f"{self.BASE_URL}/meme/{id_meme}", headers=token)
-
-

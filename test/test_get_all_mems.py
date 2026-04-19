@@ -1,7 +1,6 @@
 import allure
 import pytest
-
-bad_token = [None, {}, {"Authorization": "qwerty"}, {"Authorization": ""}]
+from data_for_tests import bad_token
 
 
 @allure.title("Получение всех мемов")
