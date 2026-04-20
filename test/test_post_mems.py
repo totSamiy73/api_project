@@ -5,6 +5,7 @@ from data_for_tests import correct_body, bad_token, bad_body_no_field, bad_body_
 
 
 @allure.title("Создание мема с валидными данными")
+@pytest.mark.smoke
 def test_post_meme(post_meme_and_delete_fixture, get_one_meme_fixture):
     post_meme_and_delete_fixture.create_new_mem(correct_body, post_meme_and_delete_fixture.AUTH_TOKEN)
     post_meme_and_delete_fixture.check_response_status_code(200)

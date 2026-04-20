@@ -4,6 +4,7 @@ from data_for_tests import bad_token, correct_body, two_akk_meme
 
 
 @allure.title("Получение мема по id")
+@pytest.mark.smoke
 def test_get_one_meme(get_one_meme_fixture, create_and_delete_meme_id_fixture):
     get_one_meme_fixture.get_meme(create_and_delete_meme_id_fixture, get_one_meme_fixture.AUTH_TOKEN)
     get_one_meme_fixture.check_response_status_code(200)
@@ -50,8 +51,8 @@ def test_get_one_meme_time_response(get_one_meme_fixture, create_and_delete_meme
 
 
 @allure.title("Получение чужого мема по id")
-def test_get_meme_someone(get_one_meme_fixture, token_create_meme_create_and_delete_return_id):
-    get_one_meme_fixture.get_meme(token_create_meme_create_and_delete_return_id, get_one_meme_fixture.AUTH_TOKEN)
+def test_get_meme_someone(get_one_meme_fixture, for_two_akk_create_meme_and_delete_return_id):
+    get_one_meme_fixture.get_meme(for_two_akk_create_meme_and_delete_return_id, get_one_meme_fixture.AUTH_TOKEN)
     get_one_meme_fixture.check_response_status_code(200)
     body = two_akk_meme.copy()
     body['updated_by'] = 'test_two_akk'  # добавили updated_by для сравнения с ответом

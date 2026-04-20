@@ -4,6 +4,7 @@ from data_for_tests import bad_token
 
 
 @allure.title("Удаление существующего мема по id")
+@pytest.mark.smoke
 def test_delete_meme(create_meme_id_fixture, delete_meme_fixture, get_one_meme_fixture):
     delete_meme_fixture.delete_meme(create_meme_id_fixture, delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_response_status_code(200)
@@ -53,6 +54,6 @@ def test_delete_meme_time_response(create_meme_id_fixture, delete_meme_fixture):
 
 
 @allure.title("Удаление чужого мема")
-def test_delete_meme_someone(token_create_meme_create_and_delete_return_id, delete_meme_fixture):
-    delete_meme_fixture.delete_meme(token_create_meme_create_and_delete_return_id, delete_meme_fixture.AUTH_TOKEN)
+def test_delete_meme_someone(for_two_akk_create_meme_and_delete_return_id, delete_meme_fixture):
+    delete_meme_fixture.delete_meme(for_two_akk_create_meme_and_delete_return_id, delete_meme_fixture.AUTH_TOKEN)
     delete_meme_fixture.check_response_status_code(403)
