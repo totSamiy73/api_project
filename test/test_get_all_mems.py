@@ -4,7 +4,8 @@ from data_for_tests import bad_token
 
 
 @allure.title("Получение всех мемов")
-def test_get_all_meme_status_positive(get_all_meme_fixture):
+@pytest.mark.smoke
+def test_get_all_meme(get_all_meme_fixture):
     get_all_meme_fixture.get_all_meme(get_all_meme_fixture.AUTH_TOKEN)
     get_all_meme_fixture.check_response_status_code(200)
     get_all_meme_fixture.check_body_get_all_meme()

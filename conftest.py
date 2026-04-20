@@ -7,7 +7,7 @@ from endpoints.get_meme import GetMeme
 from endpoints.put_meme import PutMeme
 from endpoints.post_authorize import PostAuthorize
 from endpoints.get_authorize import GetAuthorized
-from data_for_tests import correct_body, two_akk_meme, two_user
+from data_for_tests import correct_body, two_akk_meme
 
 
 @pytest.fixture()
@@ -86,11 +86,9 @@ def create_and_delete_meme_id_fixture(post_meme_fixture, delete_meme_fixture):
 
 
 @pytest.fixture()
-def token_create_meme_create_and_delete_return_id(post_authorize_fixture, post_meme_fixture, delete_meme_fixture):
-    """Получаем токен, создаем мем от этого токена, после удаляем мем"""
-    post_authorize_fixture.post_authorize(two_user)
-    token_new_akk = post_authorize_fixture.response.json()["token"]
-    post_meme_fixture.create_new_mem(two_akk_meme, {"Authorization": token_new_akk})
+def for_two_akk_create_meme_and_delete_return_id(post_meme_fixture, delete_meme_fixture):
+    """Создаем мем от AUTH_TOKEN2(2ой аккаунт), после удаляем мем"""
+    post_meme_fixture.create_new_mem(two_akk_meme, post_meme_fixture.AUTH_TOKEN2)
     id_new_akk_meme = post_meme_fixture.response.json()['id']
     yield id_new_akk_meme
-    delete_meme_fixture.delete_meme(id_new_akk_meme, {"Authorization": token_new_akk})
+    delete_meme_fixture.delete_meme(id_new_akk_meme, post_meme_fixture.AUTH_TOKEN2)

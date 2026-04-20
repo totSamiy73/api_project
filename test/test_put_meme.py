@@ -5,6 +5,7 @@ from data_for_tests import correct_body_put, bad_token, bad_body_additional_fiel
 
 
 @allure.title("Обновление мема с валидными данными")
+@pytest.mark.smoke
 def test_put_meme(put_meme_fixture, create_and_delete_meme_id_fixture, get_one_meme_fixture):
     body = correct_body_put.copy()
     body['id'] = create_and_delete_meme_id_fixture  # добавили id для тела мема
@@ -125,8 +126,8 @@ def test_put_meme_time_response(put_meme_fixture, create_and_delete_meme_id_fixt
 
 
 @allure.title("Обновление чужого мема")
-def test_put_meme_someone(put_meme_fixture, token_create_meme_create_and_delete_return_id):
+def test_put_meme_someone(put_meme_fixture, for_two_akk_create_meme_and_delete_return_id):
     body = correct_body_put.copy()
-    body['id'] = token_create_meme_create_and_delete_return_id
-    put_meme_fixture.put_meme(token_create_meme_create_and_delete_return_id, body, put_meme_fixture.AUTH_TOKEN)
+    body['id'] = for_two_akk_create_meme_and_delete_return_id
+    put_meme_fixture.put_meme(for_two_akk_create_meme_and_delete_return_id, body, put_meme_fixture.AUTH_TOKEN)
     put_meme_fixture.check_response_status_code(403)

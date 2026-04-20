@@ -13,8 +13,6 @@ main_user = {"name": "tot"}
 
 two_user = {"name": "test_two_akk"}
 
-user = {"name": "qwerty123"}
-
 bad_empty_body = [{}, None]
 
 bad_body_no_field = [{"info": {"c": 111}, "tags": ["qqq"], "text": "test_bad_body"},

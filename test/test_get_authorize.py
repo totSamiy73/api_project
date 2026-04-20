@@ -4,6 +4,7 @@ from data_for_tests import bad_token_for_get_authorize
 
 
 @allure.title('Проверка активного токена')
+@pytest.mark.smoke
 def test_get_authorize(get_authorize_fixture):
     get_authorize_fixture.get_authorize_token()
     get_authorize_fixture.check_response_status_code(200)
