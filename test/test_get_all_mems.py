@@ -5,26 +5,26 @@ from data_for_tests import bad_token
 
 @allure.title("Получение всех мемов")
 @pytest.mark.smoke
-def test_get_all_meme(get_all_meme_fixture):
-    get_all_meme_fixture.get_all_meme(get_all_meme_fixture.AUTH_TOKEN)
-    get_all_meme_fixture.check_response_status_code(200)
-    get_all_meme_fixture.check_body_get_all_meme()
+def test_get_all_meme(endpoint_get_all_meme):
+    endpoint_get_all_meme.get_all_meme(endpoint_get_all_meme.AUTH_TOKEN)
+    endpoint_get_all_meme.check_response_status_code(200)
+    endpoint_get_all_meme.check_body_get_all_meme()
 
 
 @allure.title("Получение всех мемов, без токена/некорректный токен/пустой токен")
 @pytest.mark.parametrize("badtoken", bad_token)
-def test_get_all_meme_invalid_token(get_all_meme_fixture, badtoken):
-    get_all_meme_fixture.get_all_meme(badtoken)
-    get_all_meme_fixture.check_response_status_code(401)
+def test_get_all_meme_invalid_token(endpoint_get_all_meme, badtoken):
+    endpoint_get_all_meme.get_all_meme(badtoken)
+    endpoint_get_all_meme.check_response_status_code(401)
 
 
 @allure.title("Получение всех мемов при неверном методе запроса POST")
-def test_get_all_meme_invalid_method(get_all_meme_fixture):
-    get_all_meme_fixture.get_all_meme_invalid_method()
-    get_all_meme_fixture.check_response_status_code(405)
+def test_get_all_meme_invalid_method(endpoint_get_all_meme):
+    endpoint_get_all_meme.get_all_meme_invalid_method()
+    endpoint_get_all_meme.check_response_status_code(405)
 
 
 @allure.title("Время ответа при запросе всех мемов")
-def test_get_all_meme_time_response(get_all_meme_fixture):
-    get_all_meme_fixture.get_all_meme(get_all_meme_fixture.AUTH_TOKEN)
-    get_all_meme_fixture.check_time_response()
+def test_get_all_meme_time_response(endpoint_get_all_meme):
+    endpoint_get_all_meme.get_all_meme(endpoint_get_all_meme.AUTH_TOKEN)
+    endpoint_get_all_meme.check_time_response()

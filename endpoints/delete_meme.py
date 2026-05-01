@@ -10,7 +10,7 @@ class DeleteMeme(Endpoint):
         self.response = requests.delete(f"{self.BASE_URL}/meme/{id_meme}", headers=token)
 
     @allure.step("Текст ответа при удалении мема")
-    def check_text_meme(self, id_meme):
+    def check_text_response_upon_deletion(self, id_meme):
         assert self.response.text == f"Meme with id {id_meme} successfully deleted"
 
     @allure.step("Удаление мема через POST запрос")
