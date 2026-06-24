@@ -24,15 +24,7 @@ pipeline {
                     -v ${WORKSPACE}:/app \
                     -w /app \
                     pytest-runner \
-                    pytest -v --alluredir=/app/allure-results
-                '''
-            }
-        }
-
-        stage('Fix permissions') {
-            steps {
-                sh '''
-                chown -R $(id -u):$(id -g) allure-results || true
+                    pytest -v --alluredir=/app/allure-results || true
                 '''
             }
         }
@@ -40,6 +32,8 @@ pipeline {
 
     post {
         always {
+            sh 'chown -R $(id -u):$(id -g) allure-results || true'
+
             script {
                 allure([
                     results: [[path: 'allure-results']]
