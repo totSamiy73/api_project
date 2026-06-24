@@ -9,13 +9,13 @@ pipeline {
             }
         }
 
-        stage('Build Docker image') {
+        stage('Build image') {
             steps {
                 sh 'docker build -t pytest-runner .'
             }
         }
 
-        stage('Run tests in Docker') {
+        stage('Run tests') {
             steps {
                 sh '''
                 rm -rf allure-results || true
@@ -24,19 +24,26 @@ pipeline {
                     -v ${WORKSPACE}:/app \
                     -w /app \
                     pytest-runner \
-                    pytest -v --alluredir=/app/allure-results || true
+                    pytest -v --alluredir=/app/allure-results
                 '''
             }
         }
-    }
 
-    post {
-        always {
-            sh 'chown -R $(id -u):$(id -g) allure-results || true'
+        stage('Generate Allure HTML') {
+            steps {
+                sh '''
+                rm -rf allure-report || true
+                allure generate allure-results -o allure-report --clean
+                '''
+            }
+        }
 
-            script {
-                allure([
-                    results: [[path: 'allure-results']]
+        stage('Publish report') {
+            steps {
+                publishHTML([
+                    reportDir: 'allure-report',
+                    reportFiles: 'index.html',
+                    reportName: 'Allure Report'
                 ])
             }
         }
