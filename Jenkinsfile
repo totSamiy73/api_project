@@ -9,15 +9,13 @@ pipeline {
             }
         }
 
-        stage('Build test image') {
+        stage('Build Docker image') {
             steps {
-                sh '''
-                docker build -t pytest-runner .
-                '''
+                sh 'docker build -t pytest-runner .'
             }
         }
 
-        stage('Run tests') {
+        stage('Run tests in Docker') {
             steps {
                 sh '''
                 rm -rf allure-results || true
@@ -31,6 +29,13 @@ pipeline {
             }
         }
 
+        stage('Fix permissions') {
+            steps {
+                sh '''
+                chown -R $(id -u):$(id -g) allure-results || true
+                '''
+            }
+        }
     }
 
     post {
