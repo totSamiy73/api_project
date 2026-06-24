@@ -9,16 +9,23 @@ pipeline {
             }
         }
 
+        stage('Clean Allure results') {
+            steps {
+                sh 'rm -rf allure-results || true'
+            }
+        }
+
         stage('Run tests in Docker') {
             steps {
                 sh '''
                 docker run --rm \
-                    -v $PWD:/app \
+                    --user $(id -u):$(id -g) \
+                    -v ${WORKSPACE}:/app \
                     -w /app \
                     python:3.12-slim \
                     bash -c "
                         pip install -r requirements.txt &&
-                        pytest -v --alluredir=/app/allure-results || true
+                        pytest -v --alluredir=/app/allure-results
                     "
                 '''
             }
@@ -34,17 +41,18 @@ pipeline {
             }
         }
 
-        stage('Allure Report') {
-            steps {
-                script {
-                    allure([
-                        includeProperties: false,
-                        jdk: '',
-                        properties: [],
-                        reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'allure-results']]
-                    ])
-                }
+    }
+
+    post {
+        always {
+            script {
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    properties: [],
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'allure-results']]
+                ])
             }
         }
     }
