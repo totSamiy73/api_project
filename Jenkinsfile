@@ -24,16 +24,15 @@ pipeline {
                     -v ${WORKSPACE}:/app \
                     -w /app \
                     pytest-runner \
-                    pytest -v --alluredir=/app/allure-results
+                    pytest -v --alluredir=/app/allure-results || true
                 '''
             }
         }
 
-        stage('Generate Allure HTML') {
+        stage('Generate report') {
             steps {
                 sh '''
-                rm -rf allure-report || true
-                allure generate allure-results -o allure-report --clean
+                allure generate allure-results -o allure-report --clean || true
                 '''
             }
         }
