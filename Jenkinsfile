@@ -18,9 +18,33 @@ pipeline {
                     python:3.12-slim \
                     bash -c "
                         pip install -r requirements.txt &&
-                        pytest -v
+                        pytest -v --alluredir=allure-results
                     "
                 '''
+            }
+        }
+
+        stage('Prepare Allure History') {
+            steps {
+                sh '''
+                if [ -d allure-report/history ]; then
+                    cp -r allure-report/history allure-results/
+                fi
+                '''
+            }
+        }
+
+        stage('Allure Report') {
+            steps {
+                script {
+                    allure([
+                        includeProperties: false,
+                        jdk: '',
+                        properties: [],
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'allure-results']]
+                    ])
+                }
             }
         }
     }
