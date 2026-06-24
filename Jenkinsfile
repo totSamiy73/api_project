@@ -1,21 +1,27 @@
-stage('Run tests') {
-    steps {
-        sh '''
-        rm -rf allure-results allure-report || true
+pipeline {
+    agent any
 
-        docker run --rm \
-            -v ${WORKSPACE}:/app \
-            -w /app \
-            pytest-runner \
-            pytest -v --alluredir=/app/allure-results || true
-        '''
-    }
-}
+    stages {
 
-post {
-    always {
-        sh 'allure generate allure-results -o allure-report --clean || true'
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
-        archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
+        stage('Run tests in Docker') {
+            steps {
+                sh '''
+                docker run --rm \
+                    -v $PWD:/app \
+                    -w /app \
+                    python:3.12-slim \
+                    bash -c "
+                        pip install -r requirements.txt &&
+                        pytest -v
+                    "
+                '''
+            }
+        }
     }
 }
